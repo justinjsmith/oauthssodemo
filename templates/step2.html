@@ -1,0 +1,39 @@
+<p>The authorization server will present the web site with an access token after the user has been authenticated and given consent.</p>
+<p>The access token is returned to the redirect_uri as part of the fragment, so client script must parse it.</p>
+{% if session.response_with_token %}
+
+<div class="ui-state-highlight ui-corner-all">
+	<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+    	The server returned the following response in this login sequence: {{session.response_with_token}}
+    </p>
+</div>
+<p></p>
+{% endif %}
+<p>After client script has parsed the token, it should be validated. This can be done in client script or on the server. This example relies on the server, and the JS code below demonstrates how to parse the fragment and return it to the server.</p>
+<pre class="brush: js;">
+	// First, parse the query string
+	var params = {}, queryString = location.hash.substring(1),
+	    regex = /([^&=]+)=([^&]*)/g, m;
+	while (m = regex.exec(queryString)) {
+	  params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+	}
+
+	// And send the token over to the server
+	var req = new XMLHttpRequest();
+	// consider using POST so query isn't logged
+	req.open('GET', 'http://' + window.location.host + '/accepttoken?' + queryString, true);
+
+	req.onreadystatechange = function (e) {
+	  if (req.readyState == 4) {
+	     if(req.status == 200){
+			// Save the token for any JS widgets
+			window.localStorage["access_token"] = params["access_token"];
+			// Send browser to the URI kept in state parameter
+	        window.location = params["state"];
+	      } else {
+	        alert(req.responseText)
+	      }
+	  }
+	};
+	req.send(null);
+</pre>

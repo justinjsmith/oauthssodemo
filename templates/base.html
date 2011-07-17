@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>OpenID Connect Demo</title>
+		
+		<link type="text/css" href="/css/cupertino/jquery-ui-1.8.14.custom.css" rel="stylesheet" />	
+		<link type="text/css" href="/css/main.css" rel="stylesheet" />	
+		<script type="text/javascript" src="/js/jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="/js/jquery-ui-1.8.14.custom.min.js"></script>
+
+		<link href="/css/shCore.css" rel="stylesheet" type="text/css" />
+		<link href="/css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/shCore.js"></script>
+		<script type="text/javascript" src="/js/shBrushJScript.js"></script>
+		<script type="text/javascript" src="/js/shBrushPython.js"></script>
+		
+		<script type="text/javascript">                                         
+			function initPage() {
+				$("#accordion").accordion({ header: "h3", navigation: true, active: 0 });
+				$("#accordion h3 a").click(function() {
+				   window.location = $(this).attr('href');
+				   return false;
+				 });
+				SyntaxHighlighter.all();
+				$("#header h1").click(function(){
+					window.location ='/step/1';	
+				});
+				$('button').button();
+				
+		    }
+		    $(document).ready(function() {initPage();});
+		</script>
+		
+	</head>
+	<body>
+		<div id="container">
+			<div id="header">
+				OpenId Connect Demo w/Google
+				<div id='loginBox'>
+					{% if account %}
+					    Hello {{account.given_name}}!
+					    {% if account.email %}
+						    ({{account.email}})
+					    {% endif %}
+					    {% if account.picture and account.link %}
+						    <a href='{{account.link}}' target='_blank'><img src="{{account.picture}}" alt="profile picture" width="10%"/></a>
+						{% endif %}
+					    <a href='/logout'>Logout</a><a href='/logoutandremove'>Remove</a>
+					{% else %}
+						<a href='{{ targetUrl }}'><button id='connectButton'>Connect Me!</button></a>
+					{% endif %}
+			    </div>
+			</div>
+
+			<div id="wrapper">
+				<div id="content">
+					{% block content %}{% endblock %}
+				</div>
+			</div>
+			<div id="navigation">		
+				<div id="accordion">
+					<div>
+						<h3><a href="/step/1">Step 1: Show login UI</a></h3>
+					</div>
+					<div>
+						<h3><a href="/step/2">Step 2: Grab token</a></h3>
+					</div>
+					<div>
+						<h3><a href="/step/3">Step 3: Validate it</a></h3>
+					</div>
+					<div>
+						<h3><a href="/step/4">Step 4: Get UserInfo</a></h3>
+					</div>
+				</div>
+			</div>
+			<div id="extra">
+			</div>
+			<div id="footer">
+				<hr>
+				<p>This site demonstrates Google's support for OpenID Connect. It's a prototype and should be treated that way...</p>
+		    </div>
+	    </div>
+	</body>
+</html>

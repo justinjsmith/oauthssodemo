@@ -1,0 +1,59 @@
+<p>After the token has been validated, a request may be made of the UserInfo endpoint. This endpoint is located at <strong>https://www.googleapis.com/oauth2/v1/userinfo</strong>.</p>
+<p>The request must include the access token. The access token may be sent in the query string or in the Authorization header.</p>
+{% if session.a_t %}
+<p></p>
+<div class="ui-state-highlight ui-corner-all">
+	<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+    	In this login sequence, the URL used for this request was:
+		<a href="https://www.googleapis.com/oauth2/v1/userinfo?access_token={{session.a_t}}" target="_blank">https://www.googleapis.com/oauth2/v1/userinfo?access_token={{session.a_t}}</a>
+    </p>
+</div>
+<p></p>
+{% endif %}
+<p>The Google endpoint responds with a JSON object that contains the following fields:</p>
+<p>
+	<table id="parameters">
+		<th>Name</th>
+		<th>Value</th>
+		<tr>
+			<td>id</td>
+			<td>{{session.user_info.id}}&nbsp;<em>(the id of the user)</em></td>
+		</tr>
+		<tr>
+			<td>email (if scope requested)</td>
+			<td>{{session.user_info.email}}&nbsp;<em>(the email of the user)</em></td>
+		</tr>
+		<tr>
+			<td>verified_email</td>
+			<td>{{session.user_info.verified_email}}&nbsp;<em>(whether the email has been verified)</em></td>
+		</tr>
+		<tr>
+			<td>name</td>
+			<td>{{session.user_info.name}}&nbsp;<em>(the identifier of the user)</em></td>
+		</tr>
+		<tr>
+			<td>given_name</td>
+			<td>{{session.user_info.given_name}}&nbsp;<em>(the first name of the user)</em></td>
+		</tr>
+		<tr>
+			<td>family_name</td>
+			<td>{{session.user_info.family_name}}&nbsp;<em>(the first name of the user)</em></td>
+		</tr>
+		<tr>
+			<td>link</td>
+			<td><a href="{{session.user_info.link}}" target='_blank'>{{session.user_info.link}}</a>&nbsp;<em>(a link to the user's profile)</em></td>
+		</tr>
+		<tr>
+			<td>picture</td>
+			<td><a href='{{session.user_info.picture}}' target='_blank'>{{session.user_info.picture}}</a>&nbsp;<em>(a picture of the user)</em></td>
+		</tr>
+		<tr>
+			<td>gender</td>
+			<td>{{session.user_info.gender}}&nbsp;<em>(the gender of the user)</em></td>
+		</tr>
+	</table>
+</p>
+<div class="ui-state-highlight ui-corner-all">
+	<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+						This list will likely change over time</p>
+</div>

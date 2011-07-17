@@ -1,0 +1,39 @@
+<p>The user is presented with an element enticing them to login. In the simplest case, you can redirect the browser to a resource on the OpenID Connect provider. Popups are probably a tad better.</p>
+<p>The request should include parameters to approximate the permissions the application is requesting. These parameters are shown below.</p>
+<p>
+	<table id="parameters">
+		<th>Parameter Name</th>
+		<th>Value</th>
+		<tr>
+			<td>scope</td>
+			<td>{{params.scope}}&nbsp;<em>(list can be extended)</em></td>
+		</tr>
+		<tr>
+			<td>state</td>
+			<td>{{params.state}}&nbsp;<em>(the RP can add it's own value)</em></td>
+		</tr>
+		<tr>
+			<td>redirect_uri</td>
+			<td>{{params.redirect_uri}}&nbsp;<em>(registered in the dev console)</em></td>
+		</tr>
+		<tr>
+			<td>response_type</td>
+			<td>token</td>
+		</tr>
+		<tr>
+			<td>client_id</td>
+			<td>{{params.client_id}}&nbsp;<em>(registered in the dev console)</em></td>
+		</tr>
+	</table>
+</p>
+<p><strong>Scope</strong> is a concatenated list of requested permissions. The two shown in the table request basic profile information and email address (with verification)</p>
+<p><strong>State</strong> is used to correlate the response. It is reflected back to the site.</p>
+<p><strong>redirect_uri</strong> is registered with the Authorization server a prioris, and the Authorization Server uses it as a target for the response.</p>
+<p><strong>response_type</strong> indicates whether or not the site would like an access token or a code+refresh token. In this case, only an access token is needed.</p>
+<p><strong>client_id</strong> is used along with the redirect_uri to signal to the Authorization Server the application making the request.</p>
+<div class="ui-state-highlight ui-corner-all">
+	<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+    The full URL of the target (with parameters) is: <a href="{{targetUrl}}" target='_blank'>{{targetUrl}}</a>
+    </p>
+</div>
+

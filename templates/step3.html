@@ -1,0 +1,58 @@
+<p>Validating a token is fairly simple and does not require the web site to perform any cryptography. In this example, the access token is sent to the Google endpoint located at
+	<strong>https://accounts.google.com/o/oauth2/tokeninfo</strong>. The access token may be sent in the query string.
+</p>
+{% if session.a_t %}
+
+<div class="ui-state-highlight ui-corner-all">
+	<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+    	In this login sequence, URL used for this request was: <a href="https://accounts.google.com/o/oauth2/tokeninfo?access_token={{session.a_t}}" target="_blank">https://accounts.google.com/o/oauth2/tokeninfo?access_token={{session.a_t}}</a>
+    </p>
+</div>
+<p></p>
+{% endif %}
+<p>The Google endpoint responds with a JSON object that contains the following fields:</p>
+<p>
+<table id="parameters">
+	<th>Name</th>
+	<th>Value</th>
+	<tr>
+		<td>issued_to</td>
+		<td>{{session.token_info.issued_to}}&nbsp;<em>(the application that was issued the token)</em></td>
+	</tr>
+	<tr>
+		<td>scope</td>
+		<td>{{session.token_info.scope}}&nbsp;<em>(the scopes that the user consented to)</em></td>
+	</tr>
+	<tr>
+		<td>audience</td>
+		<td>{{session.token_info.audience}}&nbsp;<em>(the protected resource the token may be sent to)</em></td>
+	</tr>
+	<tr>
+		<td>user_id</td>
+		<td>{{session.token_info.user_id}}&nbsp;<em>(the identifier of the user)</em></td>
+	</tr>
+	<tr>
+		<td>expires_in</td>
+		<td>{{session.token_info.expires_in}}&nbsp;<em>(the remaining lifetime of the token in seconds)</em></td>
+	</tr>
+</table>
+</p>
+<p>Validating the token requires at least checking the audience and the expiration time. The Python + AppEngine API code required to make the request to the Google endpoint and validate the response is shown below:</p>
+<pre class="brush: py;">
+    # check the token audience using exact match (TOKENINFO)
+    url = endpoints.TOKENINFO_ENDPOINT + '?access_token=' + a_t
+    tokeninfo = json.loads(urlfetch.fetch(url).content)
+    
+    session['token_info'] = tokeninfo
+    
+    if(tokeninfo['audience'] != endpoints.CLIENT_ID):
+      self.error(400)
+      return
+    
+    if(int(tokeninfo['expires_in']) < 1):
+      self.error(400)
+      return
+</pre>
+
+
+
