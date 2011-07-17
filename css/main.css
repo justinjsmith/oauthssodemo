@@ -48,7 +48,12 @@ div#extra{}
 
 div#footer{b}
 
-div#footer p{margin:0;padding:5px 10px;}
+div#footer p{
+    margin:0;
+    padding:5px 10px;
+}
+
+div#footer a{display:inline; padding:0px;}
 
 div#wrapper{
     float:right;
