@@ -72,17 +72,17 @@ class AcceptTokenHandler(webapp.RequestHandler):
 
         # not happy with this, but not sure what else is available       
         acct = Account(key_name=user_id, 
-                       name=userinfo['name'] if 'name' in userinfo['name'] else 'None', 
+                       name=userinfo['name'] if 'name' in userinfo['name'] else None, 
                        user_info=json.dumps(userinfo), 
-                       family_name=userinfo['family_name'] if 'family_name' in userinfo else 'None', 
-                       locale=userinfo['locale'] if 'locale' in userinfo else 'None',
-                       gender=userinfo['gender'] if 'gender' in userinfo else 'None',
-                       email=userinfo['email'] if 'email' in userinfo else 'None',
-                       given_name=userinfo['given_name'] if 'given_name' in userinfo else 'None',
-                       google_account_id=userinfo['id'] if 'id' in userinfo else 'None',
-                       verified_email=userinfo['verified_email'] if 'verified_email' in userinfo else 'None',
-                       link=userinfo['link'] if 'link' in userinfo else 'None',
-                       picture=userinfo['picture'] if 'picture' in userinfo else 'None')
+                       family_name=userinfo['family_name'] if 'family_name' in userinfo else None, 
+                       locale=userinfo['locale'] if 'locale' in userinfo else None,
+                       gender=userinfo['gender'] if 'gender' in userinfo else None,
+                       email=userinfo['email'] if 'email' in userinfo else None,
+                       given_name=userinfo['given_name'] if 'given_name' in userinfo else None,
+                       google_account_id=userinfo['id'] if 'id' in userinfo else None,
+                       verified_email=userinfo['verified_email'] if 'verified_email' in userinfo else None,
+                       link=userinfo['link'] if 'link' in userinfo else None,
+                       picture=userinfo['picture'] if 'picture' in userinfo else None)
                           
         acct.access_token = a_t
         acct.put()      

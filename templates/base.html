@@ -34,17 +34,24 @@
 	</head>
 	<body>
 		<div id="container">
-			<div id="header">
-				OpenID Connect Demo w/Google
+			<div id="header"><h1>OpenID Connect Demo w/Google</h1>
 				<div id='loginBox'>
-					{% if account %}
-					    Hello {{account.given_name}}!
-					    {% if account.email %}
-						    ({{account.email}})
-					    {% endif %}
-					    {% if account.picture and account.link %}
-						    <a href='{{account.link}}' target='_blank'><img src="{{account.picture}}" alt="profile picture" width="10%"/></a>
-						{% endif %}
+						{% if account %}
+					    	Hello {{account.given_name}}!
+						    {% if account.email %}
+							    ({{account.email}})
+						    {% endif %}
+						    {% if account.link %}
+							    <a href='{{account.link}}' target='_blank'>
+								{% if account.picture %}
+									<img src="{{account.picture}}" alt="profile picture" width="10%"/>
+								{% endif %}
+								</a>
+							{% else %}
+								{% if account.picture %}
+									<img src="{{account.picture}}" alt="profile picture" width="10%"/>
+								{% endif %}
+							{% endif %}
 					    <a href='/logout'>Logout</a><a href='/logoutandremove'>Remove</a>
 					{% else %}
 						<a href='{{ targetUrl }}'><button id='connectButton'>Connect Me!</button></a>

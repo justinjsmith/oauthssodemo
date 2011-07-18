@@ -6,7 +6,7 @@ p{margin:0 10px 10px;}
 
 a{display:block;padding:10px;}
 
-div#header {
+div#header h1 {
     height:80px;
     line-height:80px;
     margin:0;
@@ -14,6 +14,7 @@ div#header {
     font-family: Arial, sans-serif;
     font-size:34px;
     font-weight: bold;
+    display:inline;
 }
 
 div#loginBox {
@@ -26,6 +27,7 @@ div#loginBox {
     line-height:20px;
     padding-right:10px;
     font-weight:normal;
+    width:350px;
 }
 
 div#loginBox img{
