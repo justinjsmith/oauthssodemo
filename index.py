@@ -3,7 +3,8 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 from google.appengine.api import urlfetch
 from django.utils import simplejson as json
-from appengine_utilities import sessions
+#from appengine_utilities import sessions
+from gaesessions import get_current_session
 from google.appengine.ext import db
 
 import logging
@@ -17,7 +18,7 @@ def get_target_url():
     return endpoints.AUTH_ENDPOINT + '?' + urllib.urlencode(params)
     
 def get_current_account():
-    session = sessions.Session()
+    session = get_current_session()
     if 'user_id' in session:
         return Account.get_by_key_name(session['user_id'])
         
@@ -25,7 +26,7 @@ def get_params():
     return {
               'scope':endpoints.SCOPE,
               'state':'/',
-              'redirect_uri':'http://' + os.environ['HTTP_HOST'] + '/oauthcallback',
+              'redirect_uri':'https://' + os.environ['HTTP_HOST'] + '/oauthcallback',
               'response_type':'token',
               'client_id':endpoints.CLIENT_ID
              }
@@ -40,7 +41,8 @@ class CallbackHandler(webapp.RequestHandler):
 
 class AcceptTokenHandler(webapp.RequestHandler):
     def get(self):
-        session = sessions.Session()
+        session = get_current_session()
+        session.regenerate_id()
         a_t = self.request.get('access_token')
         session['a_t'] = a_t
         
@@ -66,7 +68,7 @@ class AcceptTokenHandler(webapp.RequestHandler):
         session['user_info'] = userinfo
         
         # compose the URL returned in the callback (for the view)
-        session['response_with_token'] = 'http://' + os.environ['HTTP_HOST'] + '/oauthcallback#' + self.request.query_string
+        session['response_with_token'] = 'https://' + os.environ['HTTP_HOST'] + '/oauthcallback#' + self.request.query_string
         
         acct = Account.get_by_key_name(user_id)
 
@@ -93,11 +95,11 @@ class StepHandler(webapp.RequestHandler):
             self.error(400)
             return
         
-        session = sessions.Session()
+        session = get_current_session()
         
         templateInfo = {
                             'targetUrl': get_target_url(), 
-                            'session':session, 
+                            'session': session, 
                             'params': get_params(), 
                             'stepNum': stepNum, 
                             'account':get_current_account(), 
@@ -109,18 +111,18 @@ class StepHandler(webapp.RequestHandler):
     
 class LogoutHandler(webapp.RequestHandler):
     def get(self):
-        session = sessions.Session()
+        session = get_current_session()
         logging.info('Session: %s' % session)
-        session.delete()
+        session.terminate()
         self.redirect('/')   
 
 class LogoutAndRemoveHandler(webapp.RequestHandler):
     def get(self):
-        session = sessions.Session()
+        session = get_current_session()
         logging.info('Session: %s' % session)
         user_id = session['user_id'] 
         account = Account.get_by_key_name(user_id)
-        session.delete()
+        session.terminate()
         account.delete()
         self.redirect('/') 
         
